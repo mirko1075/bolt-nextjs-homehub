@@ -1,0 +1,403 @@
+{
+  "info": {
+    "name": "HouseKeeper API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Collection for testing HouseKeeper API endpoints",
+    "_postman_id": "123e4567-e89b-12d3-a456-426614174000"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"name\": \"Test User\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/register",
+            "description": "Register a new user"
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": "{{baseUrl}}/auth/login",
+            "description": "Login user"
+          }
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/auth/me",
+            "description": "Get current user details"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Clean Kitchen\",\n    \"description\": \"Deep clean the kitchen\",\n    \"difficulty\": 3,\n    \"coins\": 50,\n    \"householdId\": \"{{householdId}}\",\n    \"assignedTo\": \"{{userId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/tasks",
+            "description": "Create a new task with optional assignment"
+          }
+        },
+        {
+          "name": "Assign Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"assignedTo\": \"{{userId}}\"\n}"
+            },
+            "url": "{{baseUrl}}/tasks/{{taskId}}/assign",
+            "description": "Assign a task to a user"
+          }
+        },
+        {
+          "name": "Unassign Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/tasks/{{taskId}}/unassign",
+            "description": "Remove task assignment"
+          }
+        },
+        {
+          "name": "Complete Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"rating\": 5,\n    \"comment\": \"Task completed successfully\"\n}"
+            },
+            "url": "{{baseUrl}}/tasks/{{taskId}}/complete",
+            "description": "Complete a task with optional rating"
+          }
+        },
+        {
+          "name": "Get Household Tasks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tasks/household/{{householdId}}",
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "Filter by status (pending, completed)"
+                },
+                {
+                  "key": "assignedTo",
+                  "value": "{{userId}}",
+                  "description": "Filter by assigned user"
+                },
+                {
+                  "key": "sort",
+                  "value": "-createdAt",
+                  "description": "Sort order (-createdAt, difficulty, coins)"
+                }
+              ]
+            },
+            "description": "Get tasks with filters and sorting"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Households",
+      "item": [
+        {
+          "name": "Create Household",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"My House\"\n}"
+            },
+            "url": "{{baseUrl}}/households",
+            "description": "Create a new household"
+          }
+        },
+        {
+          "name": "Join Household",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"inviteCode\": \"ABC123\"\n}"
+            },
+            "url": "{{baseUrl}}/households/join",
+            "description": "Join an existing household"
+          }
+        },
+        {
+          "name": "Get Household Details",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/households/{{householdId}}",
+              "query": [
+                {
+                  "key": "include",
+                  "value": "members,tasks,expenses",
+                  "description": "Include related data"
+                }
+              ]
+            },
+            "description": "Get household details with optional includes"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Expenses",
+      "item": [
+        {
+          "name": "Create Expense",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"description\": \"Groceries\",\n    \"amount\": 100,\n    \"householdId\": \"{{householdId}}\",\n    \"splits\": [\n        {\n            \"user\": \"{{userId}}\",\n            \"amount\": 50\n        }\n    ]\n}"
+            },
+            "url": "{{baseUrl}}/expenses",
+            "description": "Create a new expense"
+          }
+        },
+        {
+          "name": "Get Household Expenses",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/expenses/household/{{householdId}}",
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "Filter by status (pending, paid)"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01",
+                  "description": "Filter by start date"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31",
+                  "description": "Filter by end date"
+                }
+              ]
+            },
+            "description": "Get expenses with filters"
+          }
+        },
+        {
+          "name": "Mark Expense as Paid",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/expenses/{{expenseId}}/pay",
+            "description": "Mark an expense split as paid"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Currency",
+      "item": [
+        {
+          "name": "Transfer Coins",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"receiverId\": \"{{userId}}\",\n    \"amount\": 50,\n    \"reason\": \"Task payment\",\n    \"type\": \"TRANSFER\"\n}"
+            },
+            "url": "{{baseUrl}}/currency/transfer",
+            "description": "Transfer coins between users"
+          }
+        },
+        {
+          "name": "Get Balance",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": "{{baseUrl}}/currency/balance",
+            "description": "Get current user's coin balance"
+          }
+        },
+        {
+          "name": "Get Transactions",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/currency/transactions",
+              "query": [
+                {
+                  "key": "type",
+                  "value": "TRANSFER",
+                  "description": "Filter by type (TRANSFER, TASK_REWARD, EXPENSE_PAYMENT)"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01",
+                  "description": "Filter by start date"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31",
+                  "description": "Filter by end date"
+                }
+              ]
+            },
+            "description": "Get transactions with filters"
+          }
+        }
+      ]
+    }
+  ]
+}
